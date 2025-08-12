@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Request, Router, Response } from 'express';
 import { Prediccion } from '../entities/Prediccion';
 import { Usuario } from '../entities/Usuario';
 import AppDataSource from '../data-source';
@@ -6,7 +6,7 @@ import AppDataSource from '../data-source';
 const router = Router();
 
 // GET /api/clasificacion
-router.get('/', async (req, res) => {
+router.get('/', async (req:Request, res:Response) => {
   const prediccionRepo = AppDataSource.getRepository(Prediccion);
   const usuarioRepo = AppDataSource.getRepository(Usuario);
 
@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
     }));
 
     return res.json(clasificacion);
+// oxlint-disable-next-line no-unused-vars
   } catch (error) {
     return res.status(500).json({ message: 'Error al obtener clasificación' });
   }

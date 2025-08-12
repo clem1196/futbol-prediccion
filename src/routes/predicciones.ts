@@ -40,6 +40,7 @@ router.get(
         ],
       });
       return res.json(predicciones);
+// oxlint-disable-next-line no-unused-vars
     } catch (error) {
       return res
         .status(500)

@@ -43,6 +43,7 @@ export const getPredicciones = async (req: Request, res: Response) => {
       relations: ["partido", "partido.equipoLocal", "partido.equipoVisitante"],
     });
     return res.json(predicciones);
+// oxlint-disable-next-line no-unused-vars
   } catch (error) {
     return res.status(500).json({ message: "Error al obtener predicciones" });
   }

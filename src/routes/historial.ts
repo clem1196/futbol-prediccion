@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { Prediccion } from '../entities/Prediccion';
 import { Partido } from '../entities/Partido';
 import { Equipo } from '../entities/Equipo';
@@ -8,7 +8,7 @@ import { authenticateToken } from '../middleware/auth.middleware';
 const router = Router();
 
 // GET /api/historial/usuario/1
-router.get('/usuario/:usuarioId', authenticateToken, async (req, res) => {
+router.get('/usuario/:usuarioId', authenticateToken, async (req:Request, res:Response) => {
   const { usuarioId } = req.params;
   const prediccionRepo = AppDataSource.getRepository(Prediccion);
   const partidoRepo = AppDataSource.getRepository(Partido);
@@ -72,6 +72,7 @@ router.get('/usuario/:usuarioId', authenticateToken, async (req, res) => {
     );
 
     return res.json(historialFiltrado);
+// oxlint-disable-next-line no-unused-vars
   } catch (error) {
     return res.status(500).json({ message: 'Error al obtener historial' });
   }

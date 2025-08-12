@@ -9,6 +9,7 @@ export const getPartidos = async (req: Request, res: Response) => {
       relations: ['equipoLocal', 'equipoVisitante'],
     });
     return res.json(partidos);
+// oxlint-disable-next-line no-unused-vars
   } catch (error) {
     return res.status(500).json({ message: 'Error al obtener partidos' });
   }

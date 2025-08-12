@@ -9,8 +9,7 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "typeRoots": ["node_modules/@types", "src/types"],
-    "types": ["node", "express", "reflect-metadata"]/*opcional*/
+    "types": ["node", "express"]
   },
   "include": ["src"]
 }

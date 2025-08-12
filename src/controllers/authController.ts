@@ -44,6 +44,7 @@ export const register = async (req: Request, res: Response) => {
       token,
       usuario: { id: nuevoUsuario.id, email, nombre },
     });
+// oxlint-disable-next-line no-unused-vars
   } catch (error) {
     return res.status(500).json({ message: "Error en el servidor" });
   }

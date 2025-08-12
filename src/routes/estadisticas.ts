@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response} from 'express';
 import { Prediccion } from '../entities/Prediccion';
 import { Partido } from '../entities/Partido';
 import AppDataSource from '../data-source';
@@ -6,7 +6,7 @@ import AppDataSource from '../data-source';
 const router = Router();
 
 // GET /api/estadisticas/usuario/1
-router.get('/usuario/:usuarioId', async (req, res) => {
+router.get('/usuario/:usuarioId', async (req:Request, res:Response) => {
   const { usuarioId } = req.params;
   const prediccionRepo = AppDataSource.getRepository(Prediccion);
   const partidoRepo = AppDataSource.getRepository(Partido);
@@ -62,6 +62,7 @@ router.get('/usuario/:usuarioId', async (req, res) => {
       porcentajeAcierto: total > 0 ? ((aciertosExactos + aciertosResultado) / total * 100).toFixed(1) : 0,
       totalAciertos: aciertosExactos + aciertosResultado
     });
+// oxlint-disable-next-line no-unused-vars
   } catch (error) {
     return res.status(500).json({ message: 'Error al obtener estadísticas' });
   }
