@@ -14,7 +14,8 @@ import { Usuario } from "./entities/Usuario";
 if (path.extname(__filename) === ".js") {
   ent = ["build/entities/*.js"];
 }*/
-console.log(__dirname)
+const isProd = process.env.NODE_ENV === 'production';
+
 const AppDataSource = new DataSource({
   type: "mysql",
   host: process.env.DB_HOST,
@@ -22,7 +23,10 @@ const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Equipo, Partido, Prediccion, Usuario ],
+  entities: isProd
+    ? [path.join(__dirname, '/entities/*.js')]
+    : [Equipo, Usuario, Partido, Prediccion],
+
   synchronize: true,
   logging: false,
 });
