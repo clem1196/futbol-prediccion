@@ -12,13 +12,13 @@ import authRouter from "./routes/auth";
 import { PuntosService } from "./services/puntos.service";
 import clasificacionRouter from "./routes/clasificacion";
 import estadisticasRouter from "./routes/estadisticas";
-import historialRouter from './routes/historial';
+import historialRouter from "./routes/historial";
 import cron from "node-cron";
 import { ActualizarResultadosService } from "./services/actualizarResultados.service";
-import { sincronizarPartidos } from './scripts/sincronizar';
+import { sincronizarPartidos } from "./scripts/sincronizar";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT || '3000', 10);
 app.use(express.json());
 //Debe estar ANTES de cualquier ruta y despues de app.use(express.json())
 app.use(
@@ -36,7 +36,7 @@ app.use("/api/predicciones", prediccionesRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/clasificacion", clasificacionRouter);
 app.use("/api/estadisticas", estadisticasRouter);
-app.use('/api/historial', historialRouter);
+app.use("/api/historial", historialRouter);
 app.get("/", (req, res) => {
   res.send(`
     <h1>✅ API de Predicción de Fútbol</h1>
@@ -46,46 +46,44 @@ app.get("/", (req, res) => {
 
 // Inicializar DataSource
 AppDataSource.initialize()
-  .then(async() => {
+  .then(async () => {
     console.log("✅ Conexión con la base de datos establecida");
-    // 🔁 Programar tarea diaria: Sincronizar LaLiga (PD)
+
+    // ✅ 1. Sincronizar partidos programados (futuros)
+    // Ejecutar al iniciar
+    console.log("🔄 Iniciando sincronización de partidos...");
+    await sincronizarPartidos();
+    console.log("✅ Partidos sincronizados al iniciar");
+
+    // Programar sincronización diaria (o cada 6 horas)
+    cron.schedule("0 */6 * * *", async () => {
+      console.log("📅 [CRON] Sincronizando partidos programados...");
+      await sincronizarPartidos();
+      console.log("✅ Sincronización de partidos completada");
+    });
+
+    // ✅ 2. Actualizar resultados de partidos finalizados
+    // Cada 30 minutos
+    cron.schedule("*/30 * * * *", async () => {
+      console.log("📅 [CRON] Buscando partidos finalizados...");
+      await ActualizarResultadosService.actualizarResultados("PD");
+      console.log("✅ Resultados actualizados y puntos calculados");
+    });
+
+    // ✅ 3. Calcular puntos (opcional: solo si no lo hace actualizarResultados)
+    // PuntosService.calcularYPuntos() ya se llama dentro de actualizarResultados
+    // → No necesitas un cron aparte a menos que sea para otra liga
+
+    // ✅ 4. Sincronizar ligas grandes una vez al día
     cron.schedule("0 2 * * *", async () => {
-      console.log("📅 [CRON] Iniciando sincronización diaria de partidos...");
+      console.log("📅 [CRON] Iniciando sincronización diaria de LaLiga...");
       await FutbolApiService.sincronizarLiga("PD");
       console.log("✅ [CRON] Sincronización diaria completada");
     });
-    // 🔁 Calcular puntos cada hora
-    cron.schedule("0 * * * *", async () => {
-      console.log("📅 [CRON] Calculando puntos para partidos finalizados...");
-      await PuntosService.calcularYPuntos();
-    });
-    // 🔁 Actualizar resultados cada 30 minutos
-    cron.schedule("*/30 * * * *", async () => {
-      console.log("📅 [CRON] Buscando partidos finalizados...");
-      await ActualizarResultadosService.actualizarResultados("PD"); // LaLiga
-      // Puedes agregar otras ligas: 'PL', 'BL1', etc.
-    });
-    // Opcional: Sincronizar también otras ligas
-    // cron.schedule('0 3 * * *', async () => {
-    //   await FutbolApiService.sincronizarLiga('PL'); // Premier League
-    // });
-    app.listen(PORT, () => {
+    // ✅ Iniciar servidor
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     });
-// ✅ Sincroniza partidos al iniciar
-    console.log('🔄 Iniciando sincronización de partidos...');
-    await sincronizarPartidos();
-    console.log('✅ Partidos sincronizados al iniciar');
-
-    // Luego inicia el cron
-    cron.schedule('*/30 * * * *', async () => {
-      console.log('📅 [CRON] Sincronizando partidos...');
-      await sincronizarPartidos();
-    });
-    // 🔁 Ejecutar la primera sincronización al iniciar (opcional)
-    // Descomenta si querés que se ejecute ahora al iniciar
-    //console.log('🔧 Sincronizando por primera vez al iniciar...');
-    //FutbolApiService.sincronizarLiga('PD');
   })
   .catch((error) => {
     console.error("❌ Error al conectar con la base de datos:", error);
