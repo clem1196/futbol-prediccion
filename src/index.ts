@@ -15,6 +15,7 @@ import estadisticasRouter from "./routes/estadisticas";
 import historialRouter from './routes/historial';
 import cron from "node-cron";
 import { ActualizarResultadosService } from "./services/actualizarResultados.service";
+import { sincronizarPartidos } from './scripts/sincronizar';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,7 +46,7 @@ app.get("/", (req, res) => {
 
 // Inicializar DataSource
 AppDataSource.initialize()
-  .then(() => {
+  .then(async() => {
     console.log("✅ Conexión con la base de datos establecida");
     // 🔁 Programar tarea diaria: Sincronizar LaLiga (PD)
     cron.schedule("0 2 * * *", async () => {
@@ -71,7 +72,16 @@ AppDataSource.initialize()
     app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     });
+// ✅ Sincroniza partidos al iniciar
+    console.log('🔄 Iniciando sincronización de partidos...');
+    await sincronizarPartidos();
+    console.log('✅ Partidos sincronizados al iniciar');
 
+    // Luego inicia el cron
+    cron.schedule('*/30 * * * *', async () => {
+      console.log('📅 [CRON] Sincronizando partidos...');
+      await sincronizarPartidos();
+    });
     // 🔁 Ejecutar la primera sincronización al iniciar (opcional)
     // Descomenta si querés que se ejecute ahora al iniciar
     //console.log('🔧 Sincronizando por primera vez al iniciar...');
