@@ -36,6 +36,9 @@ app.use(
 );
 
 // Rutas
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date() });
+});
 app.use("/api/partidos", partidosRouter);
 app.use("/api/predicciones", prediccionesRouter);
 app.use("/api/auth", authRouter);
