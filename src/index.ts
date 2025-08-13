@@ -18,15 +18,20 @@ import { ActualizarResultadosService } from "./services/actualizarResultados.ser
 import { sincronizarPartidos } from "./scripts/sincronizar";
 
 const app = express();
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const PORT = parseInt(process.env.PORT || "3000", 10);
 app.use(express.json());
 //Debe estar ANTES de cualquier ruta y despues de app.use(express.json())
 app.use(
   cors({
-    origin: "http://localhost:5173", // tu frontend
+    //para produccion
+    origin: [
+      "https://689bb6e87d1f3a38fe5fa9a2--futbol-prediccion-frontend.netlify.app",
+      "https://futbol-prediccion-frontend.netlify.app",
+    ],    
+    /*origin: "http://localhost:5173", //para desarrollo*/
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"], // ✅ Incluye 'Authorization'
-    credentials: true, // opcional, si usas cookies
+    credentials: true, // Necesario si usas cookies o credenciales
   })
 );
 
