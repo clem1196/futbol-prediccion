@@ -14,35 +14,35 @@ import { Usuario } from "./entities/Usuario";
 if (path.extname(__filename) === ".js") {
   ent = ["build/entities/*.js"];
 }*/
-const isProd = process.env.NODE_ENV === 'production';
+//const isProd = process.env.NODE_ENV === "production";
 
-const AppDataSource = new DataSource({
+let AppDataSource = new DataSource({
   type: "mysql",
   host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT||'3306'),
+  port: parseInt(process.env.DB_PORT || "3306"),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: isProd
-    ? [path.join(__dirname, '/entities/*.js')]
-    : [Equipo, Usuario, Partido, Prediccion],
+  entities:[path.join(__dirname, "/entities/*.js")],
+  /*entities: isProd
+    ? [path.join(__dirname, "/entities/*.js")]
+    : [Equipo, Usuario, Partido, Prediccion],*/
 
   synchronize: true,
   logging: false,
-  /*
-  //En dasarrollo
-type: "mysql",
-  host: "localhost",
-  port: 3306,
-  username: root,
-  password: "c1l2e3m1196",
-  database: "predictiondb",
-  entities: isProd
-    ? [path.join(__dirname, '/entities/*.js')]
-    : [Equipo, Usuario, Partido, Prediccion],
-
-  synchronize: true,
-  logging: false,
-  */
 });
-export default AppDataSource
+if (process.env.NODE_ENV === "development") {
+  AppDataSource = new DataSource({
+    //En dasarrollo
+    type: "mysql",
+    host: "localhost",
+    port: 3306,
+    username: "root",
+    password: "c1l2e3m1196",
+    database: "predictiondb",
+    entities: [Equipo, Usuario, Partido, Prediccion],      
+    synchronize: true,
+    logging: false,
+  });
+}
+export default AppDataSource;
