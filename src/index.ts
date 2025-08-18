@@ -20,8 +20,8 @@ import { sincronizarPartidos } from "./scripts/sincronizar";
 const app = express();
 const PORT = parseInt(process.env.PORT || "3000", 10);
 app.use(express.json());
-//Debe estar ANTES de cualquier ruta y despues de app.use(express.json())
 
+//Debe estar ANTES de cualquier ruta y despues de app.use(express.json())
 if (process.env.NODE_ENV === "development") {
   app.use(
     cors({      
@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === "production") {
     cors({
       //para produccion
       origin: [
-      "https://689bb6e87d1f3a38fe5fa9a2--futbol-prediccion-frontend.netlify.app",
+      "https://68a38d1cc986d06129654cc3--futbol-prediccion-frontend.netlify.app",
       "https://futbol-prediccion-frontend.netlify.app",
     ], 
      
