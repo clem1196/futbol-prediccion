@@ -6,7 +6,7 @@ dotenv.config({ path: resolve(__dirname, "../.env") });
 import express from "express";
 import cors from "cors";
 import http from "http"; // 👈 Nuevo
-import { Server as SocketIOServer } from "socket.io"; // 👈 Nuevo
+import { Socket, Server as SocketIOServer } from "socket.io"; // 👈 Nuevo
 
 import AppDataSource from "./data-source";
 import partidosRouter from "./routes/matches";
@@ -32,7 +32,7 @@ const server = http.createServer(app);
 // 👇 Inicializamos Socket.IO
 export const io = new SocketIOServer(server, {
   cors: {
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback: (err: Error | null, success: boolean) => void) => {
       const allowedOrigins = [
         "http://localhost:5173",
         "https://68a5ca3b1e20e0bf37e576ad--futbol-prediccion-frontend.netlify.app",
@@ -50,7 +50,7 @@ export const io = new SocketIOServer(server, {
         callback(null, true);
       } else {
         console.warn(`Origin not allowed: ${origin}`);
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error("Not allowed by CORS"), true);
       }
     },
     methods: ["GET", "POST"],
@@ -166,7 +166,7 @@ AppDataSource.initialize()
       console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
       console.log(`🎮 Socket.IO habilitado para tiempo real`);
     });
-    io.on("connection", (socket) => {
+    io.on("connection", (socket:Socket) => {
       console.log("🟢 Cliente conectado:", socket.id);
 
       // 👇 Enviamos un evento de prueba al frontend
