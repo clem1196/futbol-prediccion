@@ -1,15 +1,15 @@
 // backend/src/scripts/sincronizar.ts
 import AppDataSource from '../data-source';
-import { Partido } from '../entities/Partido';
-import { Equipo } from '../entities/Equipo';
+import { Match } from '../entities/Match';
+import { Team } from '../entities/Team';
 import axios from 'axios';
 
 const API_KEY = process.env.FOOTBALL_API_KEY;
 const API_URL = 'https://api.football-data.org/v4';
 
 export const sincronizarPartidos = async () => {
-  const partidoRepo = AppDataSource.getRepository(Partido);
-  const equipoRepo = AppDataSource.getRepository(Equipo);
+  const partidoRepo = AppDataSource.getRepository(Match);
+  const equipoRepo = AppDataSource.getRepository(Team);
 
   try {
     const response = await axios.get(`${API_URL}/competitions/PD/matches?status=SCHEDULED`, {

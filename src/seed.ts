@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import AppDataSource from './data-source';
-import { Equipo } from './entities/Equipo';
-import { Partido } from './entities/Partido';
+import { Team } from './entities/Team';
+import { Match } from './entities/Match';
 
 AppDataSource.initialize()
   .then(async () => {
-    const equipoRepo = AppDataSource.getRepository(Equipo);
-    const partidoRepo = AppDataSource.getRepository(Partido);
+    const equipoRepo = AppDataSource.getRepository(Team);
+    const partidoRepo = AppDataSource.getRepository(Match);
 
     // Crear equipos si no existen
     let barcelona = await equipoRepo.findOneBy({ nombre: 'Barcelona' });

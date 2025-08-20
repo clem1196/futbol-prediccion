@@ -5,7 +5,7 @@ import { resolve } from 'path';
 // 🔥 Cargar variables de entorno ANTES de cualquier otra cosa
 dotenv.config({ path: resolve(__dirname, '../../.env') });
 import AppDataSource from '../data-source';
-import { ActualizarResultadosService } from '../services/actualizarResultados.service';
+import { ActualizarResultadosService } from '../services/updateResults.service';
 
 AppDataSource.initialize()
   .then(async () => {

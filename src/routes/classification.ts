@@ -1,14 +1,14 @@
 import { Request, Router, Response } from 'express';
-import { Prediccion } from '../entities/Prediccion';
-import { Usuario } from '../entities/Usuario';
+import { Prediction } from '../entities/Prediction';
+import { User } from '../entities/User';
 import AppDataSource from '../data-source';
 
 const router = Router();
 
 // GET /api/clasificacion
 router.get('/', async (req:Request, res:Response) => {
-  const prediccionRepo = AppDataSource.getRepository(Prediccion);
-  const usuarioRepo = AppDataSource.getRepository(Usuario);
+  const prediccionRepo = AppDataSource.getRepository(Prediction);
+  const usuarioRepo = AppDataSource.getRepository(User);
 
   try {
     // Obtener puntos totales por usuario

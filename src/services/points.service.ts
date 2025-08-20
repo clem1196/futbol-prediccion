@@ -1,12 +1,12 @@
 
-import { Prediccion } from '../entities/Prediccion';
-import { Partido } from '../entities/Partido';
+import { Prediction } from '../entities/Prediction';
+import { Match } from '../entities/Match';
 import AppDataSource from '../data-source';
 
 export class PuntosService {
   static async calcularYPuntos() {
-    const partidoRepo = AppDataSource.getRepository(Partido);
-    const prediccionRepo = AppDataSource.getRepository(Prediccion);
+    const partidoRepo = AppDataSource.getRepository(Match);
+    const prediccionRepo = AppDataSource.getRepository(Prediction);
 
     // Buscar partidos finalizados sin goles actualizados en predicciones
     const partidosJugados = await partidoRepo.find({

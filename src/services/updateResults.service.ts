@@ -1,20 +1,25 @@
-import axios from 'axios';
-import AppDataSource from '../data-source';
-import { Partido } from '../entities/Partido';
-console.log('🔑 API Key cargada:', process.env.FOOTBALL_API_KEY ? '✅ Sí' : '❌ No');
+import axios from "axios";
+import AppDataSource from "../data-source";
+import { Match } from "../entities/Match";
+import webpush, { PushSubscription } from "web-push";
+
+console.log(
+  "🔑 API Key cargada:",
+  process.env.FOOTBALL_API_KEY ? "✅ Sí" : "❌ No"
+);
 if (!process.env.FOOTBALL_API_KEY) {
-  throw new Error('FOOTBALL_API_KEY no está definida');
+  throw new Error("FOOTBALL_API_KEY no está definida");
 }
-const API_URL = 'https://api.football-data.org/v4';
+const API_URL = "https://api.football-data.org/v4";
 const API_KEY = process.env.FOOTBALL_API_KEY;
 
 const headers = {
-  'X-Auth-Token': API_KEY,
+  "X-Auth-Token": API_KEY,
 };
 
 export class ActualizarResultadosService {
   static async actualizarResultados(ligaId: string) {
-    const partidoRepo = AppDataSource.getRepository(Partido);
+    const partidoRepo = AppDataSource.getRepository(Match);
 
     try {
       console.log(`🔄 Actualizando resultados para la liga: ${ligaId}`);
@@ -52,19 +57,35 @@ export class ActualizarResultadosService {
         }
       }
 
-      console.log('🎉 Resultados actualizados. Calculando puntos...');
+      console.log("🎉 Resultados actualizados. Calculando puntos...");
       // Disparar cálculo de puntos
-      await import('./puntos.service').then(async (mod) => {
+      await import("./points.service").then(async (mod) => {
         await mod.PuntosService.calcularYPuntos();
       });
     } catch (error: any) {
       if (error.response?.status === 403) {
-        console.error('❌ Acceso denegado: verifica tu API Key');
+        console.error("❌ Acceso denegado: verifica tu API Key");
       } else if (error.response?.status === 429) {
-        console.error('❌ Demasiadas peticiones. Espera un minuto.');
+        console.error("❌ Demasiadas peticiones. Espera un minuto.");
       } else {
-        console.error('❌ Error al actualizar resultados:', error.message);
+        console.error("❌ Error al actualizar resultados:", error.message);
       }
     }
+    const suscripciones = new Set<PushSubscription>();
+    for (const sub of suscripciones) {
+  try {
+    await webpush.sendNotification(sub, JSON.stringify({
+      title: '⚽ Partido finalizado',
+      body: 'Revisa si acertaste tu predicción',
+      icon: '/icon-192.png',
+      sound: '/sounds/notification.mp3', // 🔊 Sonido "Slick"
+      vibrate: [200, 100, 200],
+      data: { url: '/predictions' } // Para abrir al hacer clic
+    }));
+  } catch (error) {
+    console.error('❌ Error al enviar a:', sub.endpoint, error);
+    // Opcional: eliminar suscripción si falla
+  }
+}
   }
 }

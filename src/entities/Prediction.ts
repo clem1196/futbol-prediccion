@@ -1,19 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Usuario } from './Usuario';        // ✅ Ahora existe
-import { Partido } from './Partido';
+import { User } from './User';        // ✅ Ahora existe
+import { Match } from './Match';
 
 @Entity()
-export class Prediccion {
+export class Prediction {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => Usuario)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'usuarioId' })
-  usuario!: Usuario;
+  usuario!: User;
 
-  @ManyToOne(() => Partido)
+  @ManyToOne(() => Match)
   @JoinColumn({ name: 'partidoId' })
-  partido!: Partido;
+  partido!: Match;
 
   @Column({ type: 'int' })
   golesLocal!: number;

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { Prediccion } from "../entities/Prediccion";
+import { Prediction } from "../entities/Prediction";
 import AppDataSource from "../data-source";
 
 export const crearPrediccion = async (req: Request, res: Response) => {
-  const prediccionRepo = AppDataSource.getRepository(Prediccion);
+  const prediccionRepo = AppDataSource.getRepository(Prediction);
   const { partidoId, golesLocal, golesVisitante } = req.body;
   const usuarioId = req.userId;
   if (!usuarioId) {
@@ -37,7 +37,7 @@ export const crearPrediccion = async (req: Request, res: Response) => {
 
 // ✅ Aquí estaba el error: req era de tipo Response ❌
 export const getPredicciones = async (req: Request, res: Response) => {
-  const prediccionRepo = AppDataSource.getRepository(Prediccion);
+  const prediccionRepo = AppDataSource.getRepository(Prediction);
   try {
     const predicciones = await prediccionRepo.find({
       relations: ["partido", "partido.equipoLocal", "partido.equipoVisitante"],

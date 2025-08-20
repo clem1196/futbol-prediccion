@@ -1,6 +1,6 @@
 import { Router, Request, Response} from 'express';
-import { Prediccion } from '../entities/Prediccion';
-import { Partido } from '../entities/Partido';
+import { Prediction } from '../entities/Prediction';
+import { Match } from '../entities/Match';
 import AppDataSource from '../data-source';
 
 const router = Router();
@@ -8,8 +8,8 @@ const router = Router();
 // GET /api/estadisticas/usuario/1
 router.get('/usuario/:usuarioId', async (req:Request, res:Response) => {
   const { usuarioId } = req.params;
-  const prediccionRepo = AppDataSource.getRepository(Prediccion);
-  const partidoRepo = AppDataSource.getRepository(Partido);
+  const prediccionRepo = AppDataSource.getRepository(Prediction);
+  const partidoRepo = AppDataSource.getRepository(Match);
 
   try {
     // Obtener predicciones del usuario

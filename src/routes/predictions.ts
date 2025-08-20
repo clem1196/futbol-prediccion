@@ -2,9 +2,9 @@ import { Request, Response, Router } from "express";
 import {
   crearPrediccion,
   getPredicciones,
-} from "../controllers/prediccionController";
+} from "../controllers/predictionController";
 import AppDataSource from "../data-source";
-import { Prediccion } from "../entities/Prediccion";
+import { Prediction } from "../entities/Prediction";
 import { authenticateToken } from "../middleware/auth.middleware";
 
 const router = Router();
@@ -28,7 +28,7 @@ router.get(
         .json({ message: "No puedes acceder a predicciones de otro usuario" });
     }
     const { usuarioId } = req.params;
-    const prediccionRepo = AppDataSource.getRepository(Prediccion);
+    const prediccionRepo = AppDataSource.getRepository(Prediction);
 
     try {
       const predicciones = await prediccionRepo.find({

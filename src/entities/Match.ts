@@ -1,18 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Equipo } from './Equipo';
+import { Team } from './Team';
 
 @Entity()
-export class Partido {
+export class Match {
   @PrimaryGeneratedColumn()
     id!: number;
 
-  @ManyToOne(() => Equipo)
+  @ManyToOne(() => Team)
     @JoinColumn({ name: 'equipoLocalId' })
-    equipoLocal!: Equipo;
+    equipoLocal!: Team;
 
-  @ManyToOne(() => Equipo)
+  @ManyToOne(() => Team)
     @JoinColumn({ name: 'equipoVisitanteId' })
-    equipoVisitante!: Equipo;
+    equipoVisitante!: Team;
 
   @Column({ type: 'timestamp', nullable: false })
     fecha!: Date;

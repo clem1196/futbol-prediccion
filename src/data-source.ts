@@ -6,10 +6,10 @@ import "reflect-metadata";
 //import { Usuario } from "./entities/Usuario";
 //connection for production
 import path from "path";
-import { Partido } from "./entities/Partido";
-import { Equipo } from "./entities/Equipo";
-import { Prediccion } from "./entities/Prediccion";
-import { Usuario } from "./entities/Usuario";
+import { Match } from "./entities/Match";
+import { Team } from "./entities/Team";
+import { Prediction } from "./entities/Prediction";
+import { User } from "./entities/User";
 /*let ent = ["src/entities/*.ts"];
 if (path.extname(__filename) === ".js") {
   ent = ["build/entities/*.js"];
@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === "development") {
     username: "root",
     password: "c1l2e3m1196",
     database: "predictiondb",
-    entities: [Equipo, Usuario, Partido, Prediccion],      
+    entities: [Team, User, Match, Prediction],      
     synchronize: true,
     logging: false,
   });

@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { Prediccion } from '../entities/Prediccion';
-import { Partido } from '../entities/Partido';
-import { Equipo } from '../entities/Equipo';
+import { Prediction } from '../entities/Prediction';
+import { Match } from '../entities/Match';
+//import { Team } from '../entities/Team';
 import AppDataSource from '../data-source';
 import { authenticateToken } from '../middleware/auth.middleware';
 
@@ -10,9 +10,9 @@ const router = Router();
 // GET /api/historial/usuario/1
 router.get('/usuario/:usuarioId', authenticateToken, async (req:Request, res:Response) => {
   const { usuarioId } = req.params;
-  const prediccionRepo = AppDataSource.getRepository(Prediccion);
-  const partidoRepo = AppDataSource.getRepository(Partido);
-  const equipoRepo = AppDataSource.getRepository(Equipo);
+  const prediccionRepo = AppDataSource.getRepository(Prediction);
+  const partidoRepo = AppDataSource.getRepository(Match);
+  //const equipoRepo = AppDataSource.getRepository(Team);
 
   try {
     const predicciones = await prediccionRepo.find({

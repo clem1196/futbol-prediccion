@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getPartidos } from '../controllers/partidoController';
+import { getPartidos } from '../controllers/matchController';
 
 const router = Router();
 

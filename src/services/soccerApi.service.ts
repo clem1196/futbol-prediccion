@@ -1,16 +1,16 @@
 import axios from "axios";
 import AppDataSource from "../data-source";
-import { Equipo } from "../entities/Equipo";
-import { Partido } from "../entities/Partido";
-import { FutbolApiMatchesResponse } from "../types/futbol-api.types";
+import { Team } from "../entities/Team";
+import { Match } from "../entities/Match";
+import { FutbolApiMatchesResponse } from "../types/soccerApi";
 
 const API_URL = "https://api.football-data.org/v4";
 
 
 export class FutbolApiService {
   static async sincronizarLiga(ligaId: string) {
-    const partidoRepo = AppDataSource.getRepository(Partido);
-    const equipoRepo = AppDataSource.getRepository(Equipo);
+    const partidoRepo = AppDataSource.getRepository(Match);
+    const equipoRepo = AppDataSource.getRepository(Team);
     // ✅ Validar aquí, cuando el método se llama
     const API_KEY = process.env.FOOTBALL_API_KEY;
     if (!API_KEY) {

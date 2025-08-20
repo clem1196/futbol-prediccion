@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import {} from "typeorm";
-import { Usuario } from "../entities/Usuario";
+import { User } from "../entities/User";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -10,7 +10,7 @@ dotenv.config();
 
 export const register = async (req: Request, res: Response) => {
   const { email, nombre, password } = req.body;
-  const usuarioRepo = AppDataSource.getRepository(Usuario);
+  const usuarioRepo = AppDataSource.getRepository(User);
 
   try {
     // Verificar si ya existe el email
@@ -52,7 +52,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const usuarioRepo = AppDataSource.getRepository(Usuario);
+  const usuarioRepo = AppDataSource.getRepository(User);
 
   try {
      // Validar entrada
