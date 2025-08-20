@@ -74,7 +74,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(
     cors({
       origin: [
-        "https://68a3911d8f0f376efe754f64--futbol-prediccion-frontend.netlify.app",
+        "https://68a5ca3b1e20e0bf37e576ad--futbol-prediccion-frontend.netlify.app",
         "https://futbol-prediccion-frontend.netlify.app",
       ],
       methods: ["GET", "POST", "PUT", "DELETE"],
