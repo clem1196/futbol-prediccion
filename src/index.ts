@@ -35,7 +35,7 @@ export const io = new SocketIOServer(server, {
     origin: (origin, callback) => {
       const allowedOrigins = [
         "http://localhost:5173",
-        "https://68a3911d8f0f376efe754f64--futbol-prediccion-frontend.netlify.app",
+        "https://68a5ca3b1e20e0bf37e576ad--futbol-prediccion-frontend.netlify.app",
         "https://futbol-prediccion-frontend.netlify.app",
       ];
 
