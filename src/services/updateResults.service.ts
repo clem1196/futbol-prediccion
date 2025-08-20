@@ -73,19 +73,22 @@ export class ActualizarResultadosService {
     }
     const suscripciones = new Set<PushSubscription>();
     for (const sub of suscripciones) {
-  try {
-    await webpush.sendNotification(sub, JSON.stringify({
-      title: '⚽ Partido finalizado',
-      body: 'Revisa si acertaste tu predicción',
-      icon: '/icon-192.png',
-      sound: '/sounds/notification.mp3', // 🔊 Sonido "Slick"
-      vibrate: [200, 100, 200],
-      data: { url: '/predictions' } // Para abrir al hacer clic
-    }));
-  } catch (error) {
-    console.error('❌ Error al enviar a:', sub.endpoint, error);
-    // Opcional: eliminar suscripción si falla
-  }
-}
+      try {
+        await webpush.sendNotification(
+          sub,
+          JSON.stringify({
+            title: "⚽ Partido finalizado",
+            body: "Revisa si acertaste tu predicción",
+            icon: "/icon-192.png",
+            sound: "/sounds/notification.mp3", // 🔊 Sonido "Slick"
+            vibrate: [200, 100, 200],
+            data: { url: "/predictions" }, // Para abrir al hacer clic
+          })
+        );
+      } catch (error) {
+        console.error("❌ Error al enviar a:", sub.endpoint, error);
+        // Opcional: eliminar suscripción si falla
+      }
+    }
   }
 }
